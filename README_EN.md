@@ -1,6 +1,6 @@
 # Welcome to CS2-MAP-VETO-OVERLAY
 A web application for managing and displaying CS2 esports map BP (Ban & Pick) between two teams. This project is built with PHP and JavaScript, using MySQL and local JSON files for data storage.
-中文:[README](https://github.com/SouthDream666/cs2-map-veto-overlay/blob/main/README.MD "README"
+中文:[README](https://github.com/SouthDream666/cs2-map-veto-overlay/blob/main/README.md "README")
 ## Features
 ### Multi-format Support
 - BO1 (supports both Major and IEM formats)
