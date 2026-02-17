@@ -62,6 +62,7 @@ For users in China, you may also reach me via private message on [Bilibili](http
 This project is licensed under the MIT License — see the [LICENSE](https://github.com/SouthDream666/cs2-map-veto-overlay/blob/main/LICENSE "LICENSE") file for details.
 ## AcknowledgmentsAcknowledgments
 Special thanks to TechSanjal for their [valorant-map-veto-overlay](https://github.com/TechSanjal/valorant-map-veto-overlay "valorant-map-veto-overlay") project, which served as inspiration.
+
 Thank you for using the CS2 Map Veto Overlay! Wish your tournaments a great success!
 
 ------------
