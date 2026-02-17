@@ -57,7 +57,8 @@ function dbConfig(): array
 ## 如何联系我
 如果无法正常使用可以在[Discord](https://discord.com/users/1061250571723620392 "Discord")私信我，国内用户可在[B站](https://space.bilibili.com/327205741 "B站")私信我。
 ## 许可
-本项目采用MIT许可证授权 —— 详情请参见LICENSE文件。
+本项目采用MIT许可证授权 —— 详情请参见[LICENSE](https://github.com/SouthDream666/cs2-map-veto-overlay/blob/main/LICENSE "LICENSE"
+)文件。
 ## 鸣谢
 感谢 TechSanjal 的 [valorant-map-veto-overlay](https://github.com/TechSanjal/valorant-map-veto-overlay "valorant-map-veto-overlay")
 
