@@ -1,7 +1,8 @@
 # 欢迎使用CS2-MAP-VETO-OVERLAY
 一个用于管理和显示两队之间CS2赛事地图BP(Ban&Pick)的网页应用。该项目使用 PHP 和 JavaScript 构建，使用MYSQL和本地json文件储存数据。
 
-ENGLISH:
+ENGLISH:[README_EN](https://github.com/SouthDream666/cs2-map-veto-overlay/blob/main/README_EN.MD "README_EN"
+)
 ## 特色
 ### 多赛制支持
 - BO1（支持Major和IEM两种模式）
