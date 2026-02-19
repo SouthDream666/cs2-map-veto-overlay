@@ -23,6 +23,11 @@ ENGLISH:[README_EN](https://github.com/SouthDream666/cs2-map-veto-overlay/blob/m
 - 支持T、CT、KNIFE（拼刀）三种阵营选择
 - 阵营选择的视觉区分（不同颜色显示）
 
+### 多语言支持
+- 界面默认提供简体中文和英文两种语言版本
+- 可通过修改语言配置文件（lang/*.json）扩展更多语言
+- Display界面在OBS中展示时，默认优先匹配系统语言，无对应语言时显示英语
+
 ## 用途
 可用于赛事中导播放映BP结果。
 
@@ -49,7 +54,7 @@ function dbConfig(): array
     ];
 }
 ```
-3. 打开数据库导入文件夹中的cs_map_veto.sql文件
+4. 打开数据库导入文件夹中的cs_map_veto.sql文件
 
 恭喜你！得到了一个可以投入使用的BP界面。
 ## 如何使用
@@ -57,8 +62,7 @@ function dbConfig(): array
 ## 如何联系我
 如果无法正常使用可以在[Discord](https://discord.com/users/1061250571723620392 "Discord")私信我，国内用户可在[B站](https://space.bilibili.com/327205741 "B站")私信我。
 ## 许可
-本项目采用MIT许可证授权 —— 详情请参见[LICENSE](https://github.com/SouthDream666/cs2-map-veto-overlay/blob/main/LICENSE "LICENSE"
-)文件。
+本项目采用MIT许可证授权 —— 详情请参见[LICENSE](https://github.com/SouthDream666/cs2-map-veto-overlay/blob/main/LICENSE "LICENSE")文件。
 ## 鸣谢
 感谢 TechSanjal 的 [valorant-map-veto-overlay](https://github.com/TechSanjal/valorant-map-veto-overlay "valorant-map-veto-overlay")
 
