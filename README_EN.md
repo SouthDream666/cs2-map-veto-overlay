@@ -23,6 +23,11 @@ A web application for managing and displaying CS2 esports map BP (Ban & Pick) be
 - Support for three side options: T (Terrorist), CT (Counter-Terrorist), and KNIFE (knife round)
 - Visual differentiation for side selections (displayed in different colors)
 
+### Multi-Language Support
+- Default support for Simplified Chinese and English
+- Extensible to more languages via lang/*.json files
+- Display interface only shows English in OBS
+
 ## Purpose
 Can be used to display BP results during esports broadcast production (via OBS or similar software).
 
