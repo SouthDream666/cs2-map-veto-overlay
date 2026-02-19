@@ -25,7 +25,7 @@ ENGLISH:[README_EN](https://github.com/SouthDream666/cs2-map-veto-overlay/blob/m
 
 ### 多语言支持
 - 界面默认提供简体中文和英文两种语言版本
-- 可通过修改语言配置文件（lang/*.json）扩展更多语言
+- 可通过修改语言配置文件（lang.php）扩展更多语言
 - Display界面在OBS中展示时，默认优先匹配系统语言，无对应语言时显示英语
 
 ## 用途
