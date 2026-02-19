@@ -1,10 +1,18 @@
+<?php
+require_once __DIR__ . '/lang.php';
+$lang_code = isset($_COOKIE['lang']) ? $_COOKIE['lang'] : 'zh';
+if (!in_array($lang_code, ['zh', 'en'])) {
+    $lang_code = 'zh';
+}
+$lang = getLang($lang_code);
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?php echo $lang_code === 'zh' ? 'zh-CN' : 'en'; ?>">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CS2 Map Pick and Ban - Results</title>
+    <title><?php echo $lang['title']; ?> - <?php echo $lang['submittedChoices']; ?></title>
     <link href="./assets/css/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
     <!-- Importing a similar font -->
@@ -180,6 +188,8 @@
     </div>
 
     <script>
+        // 多语言数据
+        const lang = <?php echo json_encode($lang); ?>;
         const mapsData = {
             "Ancient": "./assets/images/de_ancient.png",
             "Anubis": "./assets/images/de_anubis.png",
@@ -262,7 +272,7 @@
                             mapNameEl.style.bottom = 'auto';
                             mapNameEl.style.left = '50%';
                             mapNameEl.style.transform = 'translate(-50%, -50%)';
-                            const teamText = isDecider ? 'DECIDER' : (choice.team ? `${choice.team} ${choice.action === 'Pick' ? '选择' : '禁用'}` : '');
+                            const teamText = isDecider ? lang.decider : (choice.team ? `${choice.team} ${choice.action === 'Pick' ? lang.picked : lang.banned}` : '');
                             teamEl.textContent = teamText;
                             teamEl.style.display = teamText ? 'block' : 'none';
                             const rawSide = (choice.side || '').trim();
@@ -272,16 +282,20 @@
                             if (isDecider && sideKey) {
                                 // Decider模式下的阵营显示
                                 if (sideKey === 'KNIFE') {
-                                    sideText = '拼刀选边';
+                                    sideText = lang.knifeSide;
                                 } else {
                                     sideText = sideKey;
                                 }
                             } else if (!isDecider && choice.action === 'Pick' && sideKey) {
                                 // 正常Pick模式下的阵营显示
                                 if (sideKey === 'KNIFE') {
-                                    sideText = `拼刀选边`;
+                                    sideText = lang.asKnife;
+                                } else if (sideKey === 'T') {
+                                    sideText = `${choice.oppositeTeam} ${lang.asT}`;
+                                } else if (sideKey === 'CT') {
+                                    sideText = `${choice.oppositeTeam} ${lang.asCT}`;
                                 } else {
-                                    sideText = `${choice.oppositeTeam} 作为 ${sideKey} 方开局`;
+                                    sideText = `${choice.oppositeTeam} ${sideKey}`;
                                 }
                             }
                             

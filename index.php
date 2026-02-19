@@ -1,10 +1,19 @@
+<?php
+require_once __DIR__ . '/lang.php';
+$lang_code = isset($_GET['lang']) ? $_GET['lang'] : (isset($_COOKIE['lang']) ? $_COOKIE['lang'] : 'zh');
+if (!in_array($lang_code, ['zh', 'en'])) {
+    $lang_code = 'zh';
+}
+setcookie('lang', $lang_code, time() + (86400 * 30), '/');
+$lang = getLang($lang_code);
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?php echo $lang_code === 'zh' ? 'zh-CN' : 'en'; ?>">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CS2 Map Pick and Ban</title>
+    <title><?php echo $lang['title']; ?></title>
     <link href="./assets/css/tailwind.min.css" rel="stylesheet">
     <style>
         body {
@@ -359,27 +368,38 @@
 <body>
     <div id="toast" class="toast"></div>
     <div class="container mx-auto py-10">
-            <h1 class="cs-title mb-8 text-center">CS2地图BP系统</h1>
+        <div class="relative">
+            <h1 class="cs-title mb-8 text-center"><?php echo $lang['title']; ?></h1>
+            <!-- 语言切换 -->
+            <div class="absolute top-0 right-0">
+                <div class="inline-flex items-center gap-2">
+                    <span class="text-gray-400"><?php echo $lang['language']; ?></span>
+                    <a href="?lang=zh" class="text-blue-400 hover:text-blue-300 <?php echo $lang_code === 'zh' ? 'font-bold' : ''; ?>"><?php echo $lang['chinese']; ?></a>
+                    <span class="text-gray-500">|</span>
+                    <a href="?lang=en" class="text-blue-400 hover:text-blue-300 <?php echo $lang_code === 'en' ? 'font-bold' : ''; ?>"><?php echo $lang['english']; ?></a>
+                </div>
+            </div>
+        </div>
             
             <!-- 观察位按钮 -->
             <div class="text-center mb-8">
                 <button onclick="openObserverMode()" class="btn btn-blue text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                    进入观察模式
+                    <?php echo $lang['observerMode']; ?>
                 </button>
             </div>
         <div id="team-names-form" class="mb-8">
             <div class="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                    <label for="team1" class="block">Team 1:</label>
-                    <input type="text" id="team1" class="input w-full px-4 py-2 mt-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter Team 1 Name">
+                    <label for="team1" class="block"><?php echo $lang['team1']; ?></label>
+                    <input type="text" id="team1" class="input w-full px-4 py-2 mt-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="<?php echo $lang['enterTeam1']; ?>">
                 </div>
                 <div>
-                    <label for="team2" class="block">Team 2:</label>
-                    <input type="text" id="team2" class="input w-full px-4 py-2 mt-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter Team 2 Name">
+                    <label for="team2" class="block"><?php echo $lang['team2']; ?></label>
+                    <input type="text" id="team2" class="input w-full px-4 py-2 mt-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="<?php echo $lang['enterTeam2']; ?>">
                 </div>
             </div>
             <div class="mb-4">
-                <label for="matchFormat" class="block">赛制:</label>
+                <label for="matchFormat" class="block"><?php echo $lang['matchFormat']; ?></label>
                 <select id="matchFormat" class="select w-full px-4 py-2 mt-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" onchange="toggleBO1Type()">
                     <option value="BO1">BO1</option>
                     <option value="BO3" selected>BO3</option>
@@ -389,94 +409,96 @@
             
             <!-- BO1类型选择 -->
             <div id="bo1-type-select" class="mb-4 hidden">
-                <label for="bo1Type" class="block">BO1类型:</label>
+                <label for="bo1Type" class="block"><?php echo $lang['bo1Type']; ?></label>
                 <select id="bo1Type" class="select w-full px-4 py-2 mt-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="Major" selected>Major</option>
-                    <option value="IEM">IEM</option>
+                    <option value="Major" selected><?php echo $lang['major']; ?></option>
+                    <option value="IEM"><?php echo $lang['iem']; ?></option>
                 </select>
                 <div class="mt-2 text-sm text-gray-400">
-                    <strong>Major:</strong> A队先Ban两张，B队Ban三张，A队再Ban一张<br>
-                    <strong>IEM:</strong> A队先Ban一张，B队Ban两张，A队Ban两张，B队再Ban一张
+                    <strong><?php echo $lang['major']; ?>:</strong> <?php echo $lang['majorDesc']; ?><br>
+                    <strong><?php echo $lang['iem']; ?>:</strong> <?php echo $lang['iemDesc']; ?>
                 </div>
             </div>
             <div class="flex justify-between">
-                <button onclick="saveTeamNames()" class="btn btn-blue text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">保存队伍名称</button>
-                <button onclick="resetTeamNames()" class="btn btn-red text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">重置队伍名称</button>
+                <button onclick="saveTeamNames()" class="btn btn-blue text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"><?php echo $lang['saveTeamNames']; ?></button>
+                <button onclick="resetTeamNames()" class="btn btn-red text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"><?php echo $lang['resetTeamNames']; ?></button>
             </div>
         </div>
 
         <div id="map-pick-ban-form" class="hidden">
             <div class="mb-6">
-                <div class="mb-2 font-bold">选择地图</div>
+                <div class="mb-2 font-bold"><?php echo $lang['selectMap']; ?></div>
                 <div id="map-grid" class="map-grid"></div>
                 <input type="hidden" id="selectedMap">
             </div>
             
             <!-- BP流程状态显示 -->
             <div class="mb-6 p-4 bg-gray-800 rounded-lg">
-                <div class="font-bold mb-2">BP流程状态</div>
+                <div class="font-bold mb-2"><?php echo $lang['bpStatus']; ?></div>
                 <div class="grid grid-cols-3 gap-4">
                     <div>
-                        <div class="text-sm text-gray-400">当前赛制</div>
+                        <div class="text-sm text-gray-400"><?php echo $lang['currentFormat']; ?></div>
                         <div id="current-format" class="font-bold">BO3</div>
                     </div>
                     <div>
-                        <div class="text-sm text-gray-400">剩余Ban次数</div>
+                        <div class="text-sm text-gray-400"><?php echo $lang['remainingBans']; ?></div>
                         <div id="remaining-bans" class="font-bold">4</div>
                     </div>
                     <div>
-                        <div class="text-sm text-gray-400">剩余Pick次数</div>
+                        <div class="text-sm text-gray-400"><?php echo $lang['remainingPicks']; ?></div>
                         <div id="remaining-picks" class="font-bold">2</div>
                     </div>
                 </div>
                 <div class="mt-3">
-                    <div class="text-sm text-gray-400">当前阶段</div>
-                    <div id="current-phase" class="font-bold">Ban阶段</div>
+                    <div class="text-sm text-gray-400"><?php echo $lang['currentPhase']; ?></div>
+                    <div id="current-phase" class="font-bold"><?php echo $lang['banPhase']; ?></div>
                 </div>
             </div>
             <div class="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                    <label for="team" class="block">队伍:</label>
+                    <label for="team" class="block"><?php echo $lang['team']; ?></label>
                     <select id="team" class="select w-full px-4 py-2 mt-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
                 </div>
                 <div>
-                    <label for="action" class="block">行为:</label>
+                    <label for="action" class="block"><?php echo $lang['action']; ?></label>
                     <select id="action" class="select w-full px-4 py-2 mt-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" onchange="updateSideSelect()">
-                        <option value="Pick">Pick</option>
-                        <option value="Ban">Ban</option>
+                        <option value="Pick"><?php echo $lang['pick']; ?></option>
+                        <option value="Ban"><?php echo $lang['ban']; ?></option>
                     </select>
                 </div>
             </div>
             <div class="mb-4">
                 <label class="inline-flex items-center">
                     <input id="decider" type="checkbox" class="mr-2" onchange="toggleDecider()">
-                    <span>Decider</span>
+                    <span><?php echo $lang['decider']; ?></span>
                 </label>
             </div>
             <div class="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                    <label for="side" class="block">对方阵营:</label>
+                    <label for="side" class="block"><?php echo $lang['oppositeSide']; ?></label>
                     <select id="side" class="select w-full px-4 py-2 mt-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" disabled>
-                        <option value="">无</option>
-                        <option value="T">T</option>
-                        <option value="CT">CT</option>
-                        <option value="KNIFE">KNIFE（拼刀）</option>
+                        <option value=""><?php echo $lang['noSide']; ?></option>
+                        <option value="T"><?php echo $lang['t']; ?></option>
+                        <option value="CT"><?php echo $lang['ct']; ?></option>
+                        <option value="KNIFE"><?php echo $lang['knife']; ?></option>
                     </select>
                 </div>
             </div>
             <div class="flex justify-between">
-                <button onclick="submitChoice()" class="btn btn-blue text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">提交</button>
-                <button onclick="resetChoices()" class="btn btn-red text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">重置选择</button>
-                <button onclick="resetAll()" class="btn btn-yellow text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">重置所有数据</button>
+                <button onclick="submitChoice()" class="btn btn-blue text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"><?php echo $lang['submitButton']; ?></button>
+                <button onclick="resetChoices()" class="btn btn-red text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"><?php echo $lang['resetChoices']; ?></button>
+                <button onclick="resetAll()" class="btn btn-yellow text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"><?php echo $lang['resetAll']; ?></button>
             </div>
             <div class="mt-6">
-                <div class="mb-2 font-bold">已提交BP</div>
+                <div class="mb-2 font-bold"><?php echo $lang['submittedChoices']; ?></div>
                 <ul id="submitted-choices" class="space-y-2 submitted-list"></ul>
             </div>
         </div>
     </div>
 
     <script>
+        // 多语言数据
+        const lang = <?php echo json_encode($lang); ?>;
         const mapOptions = [
             { value: 'Ancient', label: 'Ancient', image: './assets/images/de_ancient.png' },
             { value: 'Anubis', label: 'Anubis', image: './assets/images/de_anubis.png' },
@@ -531,14 +553,14 @@
                         bpStats = {
                             bans: 6, // 2+3+1
                             picks: 0, // 无Pick，剩余的最后一张即为比赛地图
-                            phase: 'Ban阶段'
+                            phase: lang.banPhase
                         };
                     } else {
                         // IEM: A队先Ban一张，B队Ban两张，A队Ban两张，B队再Ban一张
                         bpStats = {
                             bans: 6, // 1+2+2+1
                             picks: 0, // 无Pick，剩余的最后一张即为比赛地图
-                            phase: 'Ban阶段'
+                            phase: lang.banPhase
                         };
                     }
                     break;
@@ -547,7 +569,7 @@
                     bpStats = {
                         bans: 4, // 2+2
                         picks: 2, // 1+1
-                        phase: 'Ban阶段'
+                        phase: lang.banPhase
                     };
                     break;
                 case 'BO5':
@@ -555,14 +577,14 @@
                     bpStats = {
                         bans: 2, // 两队各ban一图
                         picks: 4, // 各自pick两张图
-                        phase: 'Ban阶段'
+                        phase: lang.banPhase
                     };
                     break;
                 default:
                     bpStats = {
                         bans: 4,
                         picks: 2,
-                        phase: 'Ban阶段'
+                        phase: lang.banPhase
                     };
             }
             
@@ -591,16 +613,16 @@
             if (matchFormat === 'BO1') {
                 // BO1只有Ban阶段，完成所有Ban后直接进入BP完成
                 if (bpStats.bans === 0) {
-                    bpStats.phase = 'BP完成';
+                    bpStats.phase = lang.bpComplete;
                 }
             } else {
                 // BO3和BO5有Ban和Pick阶段
                 if (bpStats.bans === 0) {
-                    bpStats.phase = 'Pick阶段';
+                    bpStats.phase = lang.pickPhase;
                 }
                 
                 if (bpStats.bans === 0 && bpStats.picks === 0) {
-                    bpStats.phase = 'BP完成';
+                    bpStats.phase = lang.bpComplete;
                 }
             }
             
@@ -660,7 +682,7 @@
             if (team1 && team2) {
                 // 显示加载状态
                 const originalText = saveButton.textContent;
-                saveButton.textContent = '保存中...';
+                saveButton.textContent = lang.loading;
                 saveButton.disabled = true;
                 
                 fetch('saveTeams.php', {
@@ -694,18 +716,18 @@
                             document.getElementById('map-pick-ban-form').classList.remove('hidden');
                             // 计算BP统计数据
                             calculateBPStats();
-                            showToast('队伍名称已保存', 'success');
+                            showToast(lang.saveSuccess, 'success');
                         } else {
-                            showToast('设置队伍名称失败', 'error');
+                            showToast(lang.saveError, 'error');
                         }
                 }).catch(error => {
                     // 恢复按钮状态
                     saveButton.textContent = originalText;
                     saveButton.disabled = false;
-                    showToast('设置队伍名称失败', 'error');
+                    showToast(lang.saveError, 'error');
                 });
             } else {
-                showToast('请输入队伍名称', 'error');
+                showToast(lang.enterTeamName, 'error');
             }
         }
 
@@ -722,9 +744,9 @@
                     localStorage.removeItem('team2');
                     localStorage.removeItem('matchFormat');
                     document.getElementById('matchFormat').value = 'BO3';
-                    showToast('队伍名称已重置', 'success');
+                    showToast(lang.resetTeamSuccess, 'success');
                 } else {
-                    showToast('重置队伍名称失败', 'error');
+                    showToast(lang.resetTeamError, 'error');
                 }
             });
         }
@@ -769,9 +791,9 @@
             const isDecider = choice.team === 'DECIDER';
             if (isDecider) {
                 const sideText = choice.side ? ` - ${choice.side}` : '';
-                return `DECIDER - ${choice.map}${sideText}`;
+                return `${lang.decider} - ${choice.map}${sideText}`;
             }
-            const actionText = choice.action === 'Pick' ? 'PICK' : 'BAN';
+            const actionText = choice.action === 'Pick' ? lang.pick.toUpperCase() : lang.ban.toUpperCase();
             const sideText = choice.action === 'Pick' && choice.side ? ` | ${choice.team} CHOSE ${choice.side}` : '';
             return `${choice.team} ${actionText} ${choice.map}${sideText}`;
         }
@@ -796,14 +818,14 @@
                         // 编辑按钮
                         const editButton = document.createElement('button');
                         editButton.className = 'text-blue-400 hover:text-blue-300 text-sm';
-                        editButton.textContent = '编辑';
+                        editButton.textContent = lang.edit;
                         editButton.onclick = () => editChoice(choice);
                         actions.appendChild(editButton);
                         
                         // 删除按钮
                         const deleteButton = document.createElement('button');
                         deleteButton.className = 'text-red-400 hover:text-red-300 text-sm';
-                        deleteButton.textContent = '删除';
+                        deleteButton.textContent = lang.delete;
                         deleteButton.onclick = () => deleteChoice(choice.id);
                         actions.appendChild(deleteButton);
                         
@@ -837,13 +859,13 @@
             const submitButton = document.querySelector('button[onclick="submitChoice()"]');
 
             if (!map) {
-                showToast('请先选择地图', 'error');
+                showToast(lang.selectMapFirst, 'error');
                 return;
             }
 
             // 显示加载状态
             const originalText = submitButton.textContent;
-            submitButton.textContent = '提交中...';
+            submitButton.textContent = lang.loading;
             submitButton.disabled = true;
 
             const oppositeTeam = team === 'DECIDER' ? '' : ((team === localStorage.getItem('team1')) ? localStorage.getItem('team2') : localStorage.getItem('team1'));
@@ -880,7 +902,7 @@
                             submitButton.disabled = false;
                             
                             if (data.success) {
-                                showToast('编辑成功', 'success');
+                                showToast(lang.editSuccess, 'success');
                                 editingChoiceId = null;
                                 selectMap(map);
                                 loadSubmittedChoices();
@@ -889,28 +911,28 @@
                                 // 更新BP统计数据
                                 updateBPStats(action);
                             } else {
-                                showToast('编辑失败: ' + (data.message || '未知错误'), 'error');
+                                showToast(lang.editError + ': ' + (data.message || lang.serverError), 'error');
                                 editingChoiceId = null;
                             }
                         }).catch(error => {
                             // 恢复按钮状态
                             submitButton.textContent = originalText;
                             submitButton.disabled = false;
-                            showToast('编辑失败: 提交新选择时出错', 'error');
+                            showToast(lang.editError + ': ' + lang.serverError, 'error');
                             editingChoiceId = null;
                         });
                     } else {
                         // 恢复按钮状态
                         submitButton.textContent = originalText;
                         submitButton.disabled = false;
-                        showToast('编辑失败: 删除旧选择时出错', 'error');
+                        showToast(lang.editError + ': ' + lang.databaseError, 'error');
                         editingChoiceId = null;
                     }
                 }).catch(error => {
                     // 恢复按钮状态
                     submitButton.textContent = originalText;
                     submitButton.disabled = false;
-                    showToast('编辑失败: 删除旧选择时出错', 'error');
+                    showToast(lang.editError + ': ' + lang.databaseError, 'error');
                     editingChoiceId = null;
                 });
             } else {
@@ -927,7 +949,7 @@
                     submitButton.disabled = false;
                     
                     if (data.success) {
-                        showToast('提交成功', 'success');
+                        showToast(lang.submitSuccess, 'success');
                         selectMap(map);
                         loadSubmittedChoices();
                         // 禁用已选择的地图
@@ -935,13 +957,13 @@
                         // 更新BP统计数据
                         updateBPStats(action);
                     } else {
-                        showToast('提交选择失败: ' + (data.message || '未知错误'), 'error');
+                        showToast(lang.submitError + ': ' + (data.message || lang.serverError), 'error');
                     }
                 }).catch(error => {
                     // 恢复按钮状态
                     submitButton.textContent = originalText;
                     submitButton.disabled = false;
-                    showToast('提交选择失败', 'error');
+                    showToast(lang.submitError, 'error');
                 });
             }
         }
@@ -962,19 +984,19 @@
                 method: 'POST'
             }).then(response => response.json()).then(data => {
                 if (data.success) {
-                    showToast('选择已重置', 'success');
-                    document.querySelectorAll('.map-card').forEach(card => {
-                        card.classList.remove('selected', 'disabled');
-                        // 重新添加点击事件
-                        const map = card.dataset.map;
-                        card.addEventListener('click', () => selectMap(map));
-                    });
-                    document.getElementById('selectedMap').value = '';
-                    loadSubmittedChoices();
-                    // 重新计算BP统计数据
-                    calculateBPStats();
-                } else {
-                    showToast('重置选择失败', 'error');
+                showToast(lang.resetChoicesSuccess, 'success');
+                document.querySelectorAll('.map-card').forEach(card => {
+                    card.classList.remove('selected', 'disabled');
+                    // 重新添加点击事件
+                    const map = card.dataset.map;
+                    card.addEventListener('click', () => selectMap(map));
+                });
+                document.getElementById('selectedMap').value = '';
+                loadSubmittedChoices();
+                // 重新计算BP统计数据
+                calculateBPStats();
+            } else {
+                showToast(lang.resetChoicesError, 'error');
                 }
             });
         }
@@ -1005,11 +1027,11 @@
             // 更新Side选择状态
             updateSideSelect();
             
-            showToast('编辑模式已激活，请修改后重新提交', 'success');
+            showToast(lang.editModeActive, 'success');
         }
 
         function deleteChoice(id) {
-            if (confirm('确定要删除这个BP选择吗？')) {
+            if (confirm(lang.deleteConfirm)) {
                 fetch('deleteChoice.php', {
                     method: 'POST',
                     headers: {
@@ -1018,12 +1040,12 @@
                     body: JSON.stringify({ id })
                 }).then(response => response.json()).then(data => {
                     if (data.success) {
-                        showToast('删除成功', 'success');
+                        showToast(lang.deleteSuccess, 'success');
                         loadSubmittedChoices();
                         // 重新启用已删除地图
                         resetChoices();
                     } else {
-                        showToast('删除失败', 'error');
+                        showToast(lang.deleteError, 'error');
                     }
                 });
             }
@@ -1032,13 +1054,13 @@
         function resetAll() {
             resetTeamNames();
             resetChoices();
-            showToast('所有数据已重置', 'success');
+            showToast(lang.resetAllSuccess, 'success');
         }
 
         function openObserverMode() {
             // 在新窗口中打开观察模式页面
-            window.open('display.php', '_blank', 'width=1000,height=600,top=100,left=100');
-            showToast('观察模式已打开', 'success');
+            window.open('display.php?lang=' + '<?php echo $lang_code; ?>', '_blank', 'width=1000,height=600,top=100,left=100');
+            showToast(lang.observerOpened, 'success');
         }
 
         window.onload = function() {
