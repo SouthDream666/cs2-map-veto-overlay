@@ -25,7 +25,7 @@ A web application for managing and displaying CS2 esports map BP (Ban & Pick) be
 
 ### Multi-Language Support
 - Default support for Simplified Chinese and English
-- Extensible to more languages via lang/*.json files
+- Extensible to more languages via lang.php files
 - Display interface only shows English in OBS
 
 ## Purpose
